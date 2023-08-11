@@ -10,11 +10,79 @@ Este archivo contiene las mejoras y actualizaciones que se hagan en Checkout API
 
 ...
 
+## `2.17.10` 2023-07-13
+
+### Cambios
+
+- Mejora en la validación de las versiones del navegador `Opera`. Ahora valida correctamente las versiones de navegador `Opera` compatibles para vizualización de versión 3 y 4 de Checkout
+
+## `2.17.9` 2023-07-10
+
+### Cambios
+
+- Se agrega icono y traducción para el método de pago 'ACH' en el panel de administración de `wallet`
+
+## `2.17.8` 2023-07-05
+
+### Nuevo
+
+- Se agrega mètodo de pago `TRANSERVER POINTS VISA` y `TRANSERVER POINTS MASTERCARD`.
+- Ahora, hemos habilitado la capacidad de compartir sesiones de dispositivos confiables entre el panel de Wallet y las sesiones de pago en el proceso de checkout (Checkout versión 4)
+
+## `2.17.7` 2023-06-27
+
+### Cambios
+
+- Mejora en endpoint '/api/session/:requestId'. Ahora cuando se consulta un sesión reembolsada, la información se muestra correctamente.
+
+### Nuevo
+
+- Se agrega en método de pago "ACH" en el panel de control de `wallet`
+- Ahora se visualizan los "alias" nombres personalizados en el panel de control de `wallet`
+
+## `2.17.6` 2023-06-20
+
+### Nuevo
+
+- Se agrega en método de pago "ACH" en el panel de control de `wallet`
+- Ahora se visualizan los "alias" nombres personalizados en el panel de control de `wallet`
+
+## `2.17.5` 2023-06-15
+
+### Cambios
+
+- Mejora y optimización en medios de pago.
+
+## `2.17.4` 2023-06-07
+
+### Nuevo
+
+- Agrega funcionalidad para la `wallet`. Ahora es posible agregar nombres perzonalizados en los mètodos de pago "ACH" almacenados en la `wallet`. (Checkout versión 4)
+
+## `2.17.3` 2023-06-06
+
+### Cambios
+
+- Agrega compatibilidad con la validación de distintos tipos de crédito de tarjeta en los procesos de pago (Checkout versión 4)
+
+## `2.17.2` 2023-06-05
+
+### Cambios
+
+- La propiedad `userAgent` ahora está limita a 255 caracteres al crear una sesión en endpoint `/api/session`.
+- Se remueve el links en los correos de generación de `OTP` para la `wallet`
+
 ## `2.17.1` 2023-06-01
 
 ### Nuevo
 
+- se agrega funcionalidad en el proceso de cobro. Ahora los usuario pueden revocar un dispositivo de confianza desde la misma sesión. (checkout versión 4)
 - Permite invalidar un token `InstrumentInvalidateRequest` usando el `subtoken`.
+
+### Cambios
+
+- Mejora en el endpoint `/api/collect`. Ahora, cuando `collect` de suscripción es rechazado, el estado de la sesión se actualiza automaticamente a `rechazado`
+- Agrega validación a propiedad `payment.recurring.interval`al crear una  sesión endpoint `/api/session`.
 
 ## `2.17.0` 2023-05-25
 
