@@ -21,6 +21,11 @@ Router.events.on('hashChangeStart', onRouteChange)
 
 export default function App({ Component, pageProps }) {
   const LayoutComponent = Component.Layout || Layout
+  const metadata = pageProps.frontmatter ?? pageProps;
+
+  if (Component.withoutMdx) {
+    return <Component {...pageProps} />;
+  }
 
   return (
     <>
@@ -44,8 +49,8 @@ export default function App({ Component, pageProps }) {
         </>
       )}
       <Head>
-        <title>{`${pageProps.title ? pageProps.title + ' - ' : ''}Placetopay Docs`}</title>
-        <meta name="description" content={pageProps.description} />
+        <title>{`${metadata.title ? metadata.title + ' - ' : ''}Placetopay Docs`}</title>
+        <meta name="description" content={metadata.description} />
       </Head>
       <MDXProvider components={mdxComponents}>
         <LocaleProvider>

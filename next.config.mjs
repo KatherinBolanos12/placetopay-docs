@@ -18,7 +18,7 @@ const nextConfig = {
   images: {
     unoptimized: true
   },
-  output: 'export',
+  output: process.env.NODE_ENV === "development" ? undefined : "export",
   reactStrictMode: true,
   pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'mdx'],
   experimental: {
