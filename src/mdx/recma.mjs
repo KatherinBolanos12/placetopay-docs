@@ -14,6 +14,7 @@ function recmaRemoveNamedExports() {
 
 function recmaAddOpenapiRefsToStaticProps() {
   return async (tree) => {
+    const variable = process.env.NODE_ENV === 'development' ? 'dereferenceOpenapi' : 'dereferenceOpenapiCached'
     if (
       !tree.body.some(
         (node) =>
@@ -31,11 +32,11 @@ function recmaAddOpenapiRefsToStaticProps() {
           type: 'ImportSpecifier',
           local: {
             type: 'Identifier',
-            name: 'dereferenceOpenapi',
+            name: variable,
           },
           imported: {
             type: 'Identifier',
-            name: 'dereferenceOpenapi',
+            name: variable,
           },
         },
       ],
@@ -68,7 +69,7 @@ function recmaAddOpenapiRefsToStaticProps() {
             type: 'CallExpression',
             callee: {
               type: 'Identifier',
-              name: 'dereferenceOpenapi',
+              name: variable,
             },
             arguments: [
               {
