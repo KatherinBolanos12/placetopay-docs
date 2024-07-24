@@ -955,13 +955,6 @@ paths:
                     surname: Doe
                     email: jhon@doe.com
               properties:
-                service:
-                  type: string
-                  description: 'Service name'
-                  enum:
-                    - visa
-                    - mastercard
-                  example: mastercard
                 merchant:
                   type: object
                   description: 'Merchant information'
