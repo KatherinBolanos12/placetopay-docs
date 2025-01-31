@@ -19,10 +19,7 @@ window.onclick = function(event) {
     document.getElementById("pagar").style.backgroundColor = color;
 }
 
-
-
-
-let fieldCounter = 9; // Inicia en 7
+let fieldCounter = 6; // Inicia en 7
 
 function handleFieldSelection() {
     const selectedValue = document.getElementById('fieldSelector').value;
@@ -36,7 +33,7 @@ function addNewRow(numFields) {
     for (let i = 0; i < numFields; i++) {
         fieldCounter++; // Incrementa antes de usarlo para asegurar que el ID es superior a 7
 
-        if (fieldCounter > 9) { 
+        if (fieldCounter > 6) { 
             const newFieldDiv = document.createElement('div');
             newFieldDiv.classList.add('col-md-4'); // Ajusta el ancho de las columnas según necesites
             newFieldDiv.innerHTML = `
@@ -63,10 +60,7 @@ function editLabel(id) {
     }
 }
 
-function deleteField(id, btn) {
-    const fieldToRemove = btn.closest('.col-md-4');
-    if (fieldToRemove) {
-        fieldToRemove.remove();
-    }
+function deleteField(id) {
+    const fieldToRemove = document.getElementById(id).parentNode;
+    fieldToRemove.parentNode.removeChild(fieldToRemove);
 }
-
