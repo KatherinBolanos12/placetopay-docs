@@ -1,27 +1,79 @@
-import React, { useEffect, useRef } from 'react';
+import * as React from "react";
+import { List, arrayMove } from "react-movable";
+import { Pencil } from "lucide-react"; // Ícono de lápiz
 
 export function MicrositeOpenPlayground() {
-  const pinpadContainerRef = useRef();
+  const [fields, setFields] = React.useState([
+    {
+      id: "field1",
+      label: "Referencia",
+      type: "text",
+      required: true,
+    },
+    {
+      id: "field2",
+      label: "Descripción del pago",
+      type: "text",
+      required: true,
+    },
+    {
+      id: "currency",
+      label: "Moneda",
+      type: "select",
+      options: ["Selecciona una opción", "Peso colombiano", "Dólar estadounidense"],
+    },
+    {
+      id: "amount",
+      label: "Monto",
+      type: "text",
+      required: true,
+    },
 
-  useEffect(() => {
-    const src = 'https://unpkg.com/@placetopay/pinpad-sdk@latest/dist/pinpad-sdk.umd.js';
-    const container = pinpadContainerRef.current;
+    {
+      id: "buyer_id_type",
+      label: "Tipo de documento del comprador",
+      type: "select",
+      options: ["Selecciona una opción", "Cédula de ciudadanía", "Cédula de extranjería", "NIT"],
+    },
+    {
+      id: "buyer_id",
+      label: "Documento del comprador",
+      type: "text",
+      required: true,
+    },
 
-    if (document.querySelector(`script[src="${src}"]`)) {
-      return () => {
-        if (container) container.innerHTML = '';
-      };
+    {
+      id: "buyer_name",
+      label: "Nombre del comprador",
+      type: "text",
+    },
+    {
+      id: "buyer_surname",
+      label: "Apellido del comprador",
+      type: "text",
+    },
+    {
+      id: "buyer_email",
+      label: "Correo electrónico",
+      type: "email",
+    },
+  ]);
+
+  const [editingId, setEditingId] = React.useState(null);
+  const [editText, setEditText] = React.useState("");
+
+  const handleEdit = (id) => {
+    const newLabel = prompt("Ingrese el nuevo nombre del campo:");
+    if (newLabel) {
+      setFields(fields.map(field => field.id === id ? { ...field, label: newLabel } : field));
     }
+  };
 
-    const script = document.createElement('script');
-    script.src = src;
-    script.async = true;
-    document.head.appendChild(script);
+  const handleSave = (id) => {
+    setFields(fields.map(field => field.id === id ? { ...field, label: editText } : field));
+    setEditingId(null);
+  };
 
-    return () => {
-      if (container) container.innerHTML = '';
-    };
-  }, []);
 
 return (
 
@@ -43,6 +95,27 @@ return (
               <div className="md:mt-6 mb-24 md:mb-12 md:mx-auto flex flex-row w-full lg:w-4/5">
                 <form noValidate="" className="p-0 lg:p-0 md:p-2 flex flex-col">
                   <div className="form-layout w-full">
+
+                      <List
+                          values={fields}
+                          onChange={({ oldIndex, newIndex }) =>
+                            setFields(arrayMove(fields, oldIndex, newIndex))
+                          }
+                          renderList={({ children, props }) => <ul {...props}>{children}</ul>}
+                          renderItem={({ value, props }) => (
+                            <li {...props} className="flex items-center">
+                              <span>{value.label}</span>
+                              <button
+                                type="button"
+                                onClick={() => handleEdit(value.id)}
+                                className="ml-2 text-blue-500"
+                              >
+                                <Pencil size={16} />
+                              </button>
+                            </li>
+                          )}
+                      />
+                      
                    
                       <div className="row g-3" id="formFields">
                         <div className="col-md-6">
