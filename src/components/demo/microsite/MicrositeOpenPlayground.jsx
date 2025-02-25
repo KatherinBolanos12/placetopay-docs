@@ -1,6 +1,6 @@
 import * as React from "react";
 import { List, arrayMove } from "react-movable";
-import { Pencil } from "lucide-react"; // Ícono de lápiz
+import { Pencil, Trash, Plus } from "lucide-react"; // Íconos de lápiz, basura y más
 
 export function MicrositeOpenPlayground() {
   const [fields, setFields] = React.useState([
@@ -28,7 +28,6 @@ export function MicrositeOpenPlayground() {
       type: "text",
       required: true,
     },
-
     {
       id: "buyer_id_type",
       label: "Tipo de documento del comprador",
@@ -41,7 +40,6 @@ export function MicrositeOpenPlayground() {
       type: "text",
       required: true,
     },
-
     {
       id: "buyer_name",
       label: "Nombre del comprador",
@@ -69,6 +67,20 @@ export function MicrositeOpenPlayground() {
     }
   };
 
+  const handleDelete = (id) => {
+    setFields(fields.filter(field => field.id !== id));
+  };
+
+  const handleAddField = () => {
+    const newField = {
+      id: `field${fields.length + 1}`,
+      label: `Nuevo campo ${fields.length + 1}`,
+      type: "text",
+      required: false,
+    };
+    setFields([...fields, newField]);
+  };
+
   const handleSave = (id) => {
     setFields(fields.map(field => field.id === id ? { ...field, label: editText } : field));
     setEditingId(null);
@@ -83,244 +95,60 @@ return (
         <div className="mx-auto w-full">
           <div className="card-main h-screen flex flex-col justify-between" name="EGM Demostración - Comercio de Pruebas Test Lina" header="https://placetopay-static-uat-bucket.s3.us-east-2.amazonaws.com/co/test/microsites/images/8V4kVIZ5f9tdiIcNOXmKwxXwkZBTohX6ga7SiGu6.png">
             <div className="p-4 flex-grow">
-
               <div className="w-full flex justify-center mt-4 mb-8">
                 <img src="https://placetopay-static-uat-bucket.s3.us-east-2.amazonaws.com/co/test/microsites/images/8V4kVIZ5f9tdiIcNOXmKwxXwkZBTohX6ga7SiGu6.png" class="h-24 w-auto" alt="EGM Demostración - Comercio de Pruebas Test Lina"/>
               </div>
-
               <div className="my-4 md:my-6 text-center">
                 <p className="font-bold">Comience el proceso de pago, ingresando la siguiente información</p>
               </div>
-
               <div className="md:mt-6 mb-24 md:mb-12 md:mx-auto flex flex-row w-full lg:w-4/5">
                 <form noValidate="" className="p-0 lg:p-0 md:p-2 flex flex-col">
                   <div className="form-layout w-full">
-
-                      <List
-                          values={fields}
-                          onChange={({ oldIndex, newIndex }) =>
-                            setFields(arrayMove(fields, oldIndex, newIndex))
-                          }
-                          renderList={({ children, props }) => <ul {...props}>{children}</ul>}
-                          renderItem={({ value, props }) => (
-                            <li {...props} className="flex items-center">
-                              <span>{value.label}</span>
-                              <button
-                                type="button"
-                                onClick={() => handleEdit(value.id)}
-                                className="ml-2 text-blue-500"
-                              >
-                                <Pencil size={16} />
-                              </button>
-                            </li>
-                          )}
-                      />
-                      
-                   
-                      <div className="row g-3" id="formFields">
-                        <div className="col-md-6">
-                          <label htmlFor="field1" className="block mb-1 text-sm font-medium text-gray-700">
-                            Referencia <span className="text-red-500">*</span>
-                          </label>
+                    <List
+                      values={fields}
+                      onChange={({ oldIndex, newIndex }) =>
+                        setFields(arrayMove(fields, oldIndex, newIndex))
+                      }
+                      renderList={({ children, props }) => <ul {...props} className="list-none pl-0">{children}</ul>}
+                      renderItem={({ value, props }) => (
+                        <li {...props} className="block mb-1 text-sm font-medium text-gray-700 list-none pl-0">
+                          <span>{value.label}</span>
+                          <button
+                            type="button"
+                            onClick={() => handleEdit(value.id)}
+                            className="ml-2 text-blue-500"
+                          >
+                          <Pencil size={16} />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleDelete(value.id)}
+                            className="ml-2 text-red-500"
+                          >
+                          <Trash size={16} />
+                          </button>
                           <input 
                             type="text" 
                             className="w-full border border-gray-400 py-2 text-gray-900 outline-none placeholder:text-gray-400 focus:border-primary-300 rounded-lg" 
                             id="field1"
                           />
-                        </div>
-
-                        <div className="col-md-6">
-                          <label htmlFor="field2" className="block mb-1 text-sm font-medium text-gray-700">
-                            Descripción del pago <span className="text-red-500">*</span>
-                          </label>
-                          <input 
-                            type="text" 
-                            className="w-full border border-gray-400 py-2 text-gray-900 outline-none placeholder:text-gray-400 focus:border-primary-300 rounded-lg" 
-                            id="field2"
-                          />
-                        </div>
-                      
-
-                        <div className="col-md-6">
-                          <div className="editable-label">
-                            <label htmlFor="currency" className="block mb-1 text-sm font-medium text-gray-700 after:content-['_*']">
-                              Moneda
-                            </label>
-                            <button type="button" className="edit-btn" onClick={() => editLabel('currency')}>
-                              <i className="bi bi-pencil"></i>
-                            </button>
-                          </div>
-                          <select
-                            id="currency"
-                            name="currency"
-                            className="w-full border border-gray-400 py-2 text-gray-900 outline-none placeholder:text-gray-400 focus:border-primary-300 rounded-lg"
-                          >
-                            <option value="">Selecciona una opción</option>
-                            <option value="COP">Peso colombiano</option>
-                            <option value="USD">Dólar estadounidense</option>
-                          </select>
-                        </div>
-
-                        <div className="col-md-6">
-                          <div className="editable-label">
-                            <label htmlFor="amount" className="block mb-1 text-sm font-medium text-gray-700 after:content-['_*']">
-                              Monto
-                            </label>
-                            <button type="button" className="edit-btn" onClick={() => editLabel('amount')}>
-                              <i className="bi bi-pencil"></i>
-                            </button>
-                          </div>
-                          <input
-                            type="text"
-                            id="amount"
-                            className="w-full border border-gray-400 py-2 text-gray-900 outline-none placeholder:text-gray-400 focus:border-primary-300 rounded-lg"
-                          />
-                        </div>
-
-                        <div className="col-md-6">
-                          <div className="editable-label">
-                            <label htmlFor="buyer_id_type" className="form-label">
-                              Tipo de documento del comprador
-                            </label>
-                            <button type="button" className="edit-btn" onClick={() => editLabel('buyer_id_type')}>
-                              <i className="bi bi-pencil"></i>
-                            </button>
-                            <button type="button" className="delete-btn" onClick={() => deleteField('buyer_id_type')}>
-                              <i className="bi bi-trash"></i>
-                            </button>
-                          </div>
-                          <select id="buyer_id_type" className="w-full border border-gray-400 py-2 text-gray-900 outline-none placeholder:text-gray-400 focus:border-primary-300 rounded-lg">
-                            <option value="">Selecciona una opción</option>
-                            <optgroup label="Colombia">
-                              <option value="CC">Cédula de ciudadanía</option>
-                              <option value="CE">Cédula de extranjería</option>
-                              <option value="NIT">NIT</option>
-                              <option value="RUT">RUT</option>
-                              <option value="TI">Tarjeta identidad</option>
-                            </optgroup>
-                            <optgroup label="Belize">
-                              <option value="BRN">Business Registration Number</option>
-                              <option value="BZSSN">Social Security ID</option>
-                            </optgroup>
-                            <optgroup label="Brazil">
-                              <option value="CPF">Cadastro de Pessoas Físicas</option>
-                            </optgroup>
-                            <optgroup label="Chile">
-                              <option value="CLRUT">RUT</option>
-                            </optgroup>
-                            <optgroup label="Costa Rica">
-                              <option value="DIDI">Cédula DIDI</option>
-                              <option value="DIMEX">Cédula DIMEX</option>
-                              <option value="CRCPF">Persona Física Nacional</option>
-                              <option value="CPJ">Persona Jurídica</option>
-                            </optgroup>
-                            <optgroup label="Ecuador">
-                              <option value="CI">Cédula de identidad</option>
-                              <option value="RUC">Registro único de contribuyente</option>
-                            </optgroup>
-                            <optgroup label="Honduras">
-                              <option value="HNDR">Documento de residencia</option>
-                              <option value="HNDNI">Documento nacional de identificación</option>
-                              <option value="RTN">Número de Registro Tributario</option>
-                            </optgroup>
-                            <optgroup label="International">
-                              <option value="LIC">LIC</option>
-                              <option value="PPN">Passport</option>
-                              <option value="TAX">TAX</option>
-                            </optgroup>
-                            <optgroup label="Panamá">
-                              <option value="CIP">Cédula de identidad personal</option>
-                              <option value="PARUC">Registro único de contribuyente</option>
-                            </optgroup>
-                            <optgroup label="Perú">
-                              <option value="DNI">DNI</option>
-                              <option value="PERUC">Registro único de contribuyente</option>
-                            </optgroup>
-                            <optgroup label="Puerto Rico">
-                              <option value="EIN">Employer Identification Number</option>
-                            </optgroup>
-                            <optgroup label="Uruguay">
-                              <option value="UYCI">Cédula de Identidad</option>
-                              <option value="UYRUT">Registro Único Tributario</option>
-                            </optgroup>
-                          </select>
-                        </div>
-
-                        <div className="col-md-6">
-                          <div className="editable-label">
-                            <label htmlFor="buyer_id" className="form-label">Documento del comprador</label>
-                            <button type="button" className="edit-btn" onClick={() => editLabel('buyer_id')}>
-                              <i className="bi bi-pencil"></i>
-                            </button>
-                            <button type="button" className="delete-btn" onClick={() => deleteField('buyer_id')}>
-                              <i className="bi bi-trash"></i>
-                            </button>
-                          </div>
-                          <input 
-                            type="text" 
-                            id="buyer_id" 
-                            className="w-full border border-gray-400 py-2 text-gray-900 outline-none placeholder:text-gray-400 focus:border-primary-300 rounded-lg" 
-                          />
-                        </div>
-
-                        <div className="col-md-6">
-                          <div className="editable-label">
-                            <label htmlFor="buyer_name" className="form-label">Nombre del comprador</label>
-                            <button type="button" className="edit-btn" onClick={() => editLabel('buyer_name')}>
-                              <i className="bi bi-pencil"></i>
-                            </button>
-                            <button type="button" className="delete-btn" onClick={() => deleteField('buyer_name')}>
-                              <i className="bi bi-trash"></i>
-                            </button>
-                          </div>
-                          <input 
-                            type="text" 
-                            id="buyer_name" 
-                            className="w-full border border-gray-400 py-2 text-gray-900 outline-none placeholder:text-gray-400 focus:border-primary-300 rounded-lg" 
-                          />
-                        </div>
-
-                        <div className="col-md-6">
-                          <div className="editable-label">
-                            <label htmlFor="buyer_surname" className="form-label">Apellido del comprador</label>
-                            <button type="button" className="edit-btn" onClick={() => editLabel('buyer_surname')}>
-                              <i className="bi bi-pencil"></i>
-                            </button>
-                            <button type="button" className="delete-btn" onClick={() => deleteField('buyer_surname')}>
-                              <i className="bi bi-trash"></i>
-                            </button>
-                          </div>
-                          <input 
-                            type="text" 
-                            id="buyer_surname" 
-                            className="w-full border border-gray-400 py-2 text-gray-900 outline-none placeholder:text-gray-400 focus:border-primary-300 rounded-lg" 
-                          />
-                        </div>
-                    
-                        <div className="col-md-12">
-                          <div className="editable-label">
-                            <label htmlFor="buyer_email" className="form-label">Correo electrónico</label>
-                            <button type="button" className="edit-btn" onClick={() => editLabel('buyer_email')}>
-                              <i className="bi bi-pencil"></i>
-                            </button>
-                            <button type="button" className="delete-btn" onClick={() => deleteField('buyer_email')}>
-                              <i className="bi bi-trash"></i>
-                            </button>
-                          </div>
-                          <input 
-                            type="email" 
-                            id="buyer_email" 
-                            className="w-full border border-gray-400 py-2 text-gray-900 outline-none placeholder:text-gray-400 focus:border-primary-300 rounded-lg" 
-                          />
-                        </div>
-                    
-                        <div className="mt-6">
-                          <p className="text-gray-500 text-sm text-justify">
-                            Al continuar, acepto las <span>políticas</span> aplicables para el tratamiento de mis datos personales según la jurisdicción local del responsable y de 
-                            <a href="https://www.placetopay.com/web/politicas-de-privacidad/" target="_blank" rel="noopener noreferrer" className="font-bold" tabIndex="-1"> Evertec PlacetoPay</a> en su calidad de encargado.
-                          </p>
-                        </div>
-                      </div>                         
+                        </li>
+                      )}
+                    />
+                    <button
+                        type="button"
+                        onClick={handleAddField}
+                        className="mt-4 p-2 bg-gray-500 text-white rounded-lg flex items-center justify-center"
+                      >
+                        <Plus size={16} className="mr-2" />
+                        Añadir nuevo campo
+                    </button>
+                    <div className="mt-6">
+                      <p className="text-gray-500 text-sm text-justify">
+                        Al continuar, acepto las <span>políticas</span> aplicables para el tratamiento de mis datos personales según la jurisdicción local del responsable y de 
+                        <a href="https://www.placetopay.com/web/politicas-de-privacidad/" target="_blank" rel="noopener noreferrer" className="font-bold" tabIndex="-1"> Evertec PlacetoPay</a> en su calidad de encargado.
+                      </p>
+                    </div>                    
                   </div>                     
                 </form>
               </div>
