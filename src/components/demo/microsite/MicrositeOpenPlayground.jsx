@@ -15,6 +15,7 @@ export function MicrositeOpenPlayground() {
       subLabel: "(Referencia)",
       type: "text",
       required: true,
+      
     },
     {
       id: "payment_description",
@@ -81,28 +82,7 @@ export function MicrositeOpenPlayground() {
     setFields(fields.filter(field => field.id !== id));
   };
 
-  const handleFieldSelection = (e) => {
-    const numFields = parseInt(e.target.value);
-    if (!isNaN(numFields)) addNewRow(numFields);
-  };
-
-  const addNewRow = (numFields) => {
-    setFieldCounter(prevCounter => {
-      const newFields = Array.from({ length: numFields }, () => {
-        const newCounter = prevCounter + 1;
-        return {
-          id: `field${newCounter}`,
-          label: `Nuevo campo ${newCounter}`,
-          type: "text",
-          required: false,
-        };
-      });
-  
-      setFields(prevFields => [...prevFields, ...newFields]);
-  
-      return prevCounter + numFields;
-    });
-  };
+ 
 
   return (
     <div>
@@ -110,11 +90,12 @@ export function MicrositeOpenPlayground() {
 
       <div className="flex flex-wrap items-center gap-4">
         <ExportToPDF targetRef={targetRef} />
+
         <div className="flex flex-row gap-4 items-start cursor-pointer mt-4">
           <select
             id="fieldSelector"
             className="p-2 bg-gray-500 text-white rounded-lg flex items-center justify-center cursor-pointer focus:outline-none hover:bg-gray-600"
-            onChange={handleFieldSelection}
+
           >
             <option value="">Agregar Campo</option>
             <option value="1">1 Fila de 1 Campo</option>
@@ -140,40 +121,64 @@ export function MicrositeOpenPlayground() {
                   <div className="md:mt-6 mb-24 md:mb-12 md:mx-auto flex flex-row w-full lg:w-4/5">
                     <form noValidate="" className="p-0 lg:p-0 md:p-2 flex flex-col">
                       <div className="form-layout w-full">
-                        
                         <List
                           values={fields}
                           onChange={({ oldIndex, newIndex }) =>
                             setFields(arrayMove(fields, oldIndex, newIndex))
                           }
                           renderList={({ children, props }) => (
-                            <div {...props} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <div {...props} className="grid grid-cols-1 gap-4">
                               {children}
                             </div>
                           )}
-                          renderItem={({ value, props }) => (
-                            <div {...props} className="flex flex-col">
-                              <label className="text-sm font-medium text-gray-700 mb-1">{value.label}</label>
-                              {value.subLabel && <small className="text-xs text-gray-500 mb-2">{value.subLabel}</small>}
-                              <div className="flex items-center gap-2">
-                                <input 
-                                  type="text" 
-                                  className="w-full border border-gray-400 py-2 text-gray-900 outline-none placeholder:text-gray-400 focus:border-primary-300 rounded-lg" 
-                                  id={value.id}
-                                />
-                                <button type="button" onClick={() => handleEdit(value.id)} className="text-blue-500">
-                                  <Pencil size={16} />
-                                </button>
-                                {!protectedFields.includes(value.id) && (
-                                  <button type="button" onClick={() => handleDelete(value.id)} className="text-red-500">
-                                    <Trash size={16} />
-                                  </button>
-                                )}
-                              </div>
-                            </div>
-                          )}
+                          renderItem={({ value, props }) => {
+                            if (value.id === "currency" || value.id === "amount" || value.id === "buyer_id_type" || value.id === "buyer_id" || value.id === "buyer_name" || value.id === "buyer_surname") {
+                              return (
+                                <div {...props} className="flex flex-col col-span-1">
+                                  <label className="text-sm font-medium text-gray-700 mb-1">{value.label}</label>
+                                  {value.subLabel && <small className="text-xs text-gray-500 mb-1">{value.subLabel}</small>}
+                                  <div className="flex items-center gap-2">
+                                    <input 
+                                      type="text" 
+                                      className="w-full border border-gray-400 py-2 text-gray-900 outline-none placeholder:text-gray-400 focus:border-primary-300 rounded-lg" 
+                                      id={value.id}
+                                    />
+                                    <button type="button" onClick={() => handleEdit(value.id)} className="text-blue-500">
+                                      <Pencil size={16} />
+                                    </button>
+                                    {!protectedFields.includes(value.id) && (
+                                      <button type="button" onClick={() => handleDelete(value.id)} className="text-red-500">
+                                        <Trash size={16} />
+                                      </button>
+                                    )}
+                                  </div>
+                                </div>
+                              );
+                            } else if (value.id === "reference" || value.id === "payment_description" || value.id === "buyer_email") {
+                              return (
+                                <div {...props} className="flex flex-col col-span-1 md:col-span-2">
+                                  <label className="text-sm font-medium text-gray-700 mb-1">{value.label}</label>
+                                  {value.subLabel && <small className="text-xs text-gray-500 mb-1">{value.subLabel}</small>}
+                                  <div className="flex items-center gap-2">
+                                    <input 
+                                      type="text" 
+                                      className="w-full border border-gray-400 py-2 text-gray-900 outline-none placeholder:text-gray-400 focus:border-primary-300 rounded-lg" 
+                                      id={value.id}
+                                    />
+                                    <button type="button" onClick={() => handleEdit(value.id)} className="text-blue-500">
+                                      <Pencil size={16} />
+                                    </button>
+                                    {!protectedFields.includes(value.id) && (
+                                      <button type="button" onClick={() => handleDelete(value.id)} className="text-red-500">
+                                        <Trash size={16} />
+                                      </button>
+                                    )}
+                                  </div>
+                                </div>
+                              );
+                            }
+                          }}
                         />
-                        
                         <div className="mt-6">
                           <p className="text-gray-500 text-sm text-justify">
                             Al continuar, acepto las <span>políticas</span> aplicables para el tratamiento de mis datos personales según la jurisdicción local del responsable y de
@@ -187,6 +192,7 @@ export function MicrositeOpenPlayground() {
               </div>
             </div>
           </div>
+
 
           <div className="shrink-0 flex flex-col justify-between relative p-8 w-1/3 z-0 side-panel">
             <div className="text-black">
