@@ -2,7 +2,7 @@ import * as React from "react";
 import { useRef } from 'react';
 import { ExportToPDF } from '@/components/ExportToPDF';
 import { List, arrayMove } from "react-movable";
-import { Pencil, Trash, Plus } from "lucide-react"; // Íconos de lápiz, basura y más
+import { Pencil, Trash, Plus } from "lucide-react";
 import Image from 'next/image'
 import logoPng from '@/images/logos/logo.png'
 import footerSvg from '@/images/logos/footer.svg'
@@ -10,26 +10,31 @@ import footerSvg from '@/images/logos/footer.svg'
 export function MicrositeOpenPlayground() {
   const [fields, setFields] = React.useState([
     {
-      id: "field1",
+      id: "reference",
       label: "Referencia",
+      subLabel: "(Referencia)",
       type: "text",
       required: true,
     },
     {
-      id: "field2",
+      id: "payment_description",
       label: "Descripción del pago",
+      subLabel: "(Descripción del pago)",
       type: "text",
       required: true,
     },
     {
       id: "currency",
       label: "Moneda",
+      subLabel: "(Moneda)",
       type: "select",
       options: ["Selecciona una opción", "Peso colombiano", "Dólar estadounidense"],
+      required: true,
     },
     {
       id: "amount",
       label: "Monto",
+      subLabel: "(Monto)",
       type: "text",
       required: true,
     },
@@ -43,7 +48,6 @@ export function MicrositeOpenPlayground() {
       id: "buyer_id",
       label: "Documento del comprador",
       type: "text",
-      required: true,
     },
     {
       id: "buyer_name",
@@ -62,8 +66,9 @@ export function MicrositeOpenPlayground() {
     },
   ]);
 
-  const [editingId, setEditingId] = React.useState(null);
-  const [editText, setEditText] = React.useState("");
+  const [fieldCounter, setFieldCounter] = React.useState(6);
+  const targetRef = useRef();
+  const protectedFields = ["reference", "payment_description", "currency", "amount"];
 
   const handleEdit = (id) => {
     const newLabel = prompt("Ingrese el nuevo nombre del campo:");
@@ -76,36 +81,50 @@ export function MicrositeOpenPlayground() {
     setFields(fields.filter(field => field.id !== id));
   };
 
-  const handleAddField = () => {
-    const newField = {
-      id: `field${fields.length + 1}`,
-      label: `Nuevo campo ${fields.length + 1}`,
-      type: "text",
-      required: false,
-    };
-    setFields([...fields, newField]);
+  const handleFieldSelection = (e) => {
+    const numFields = parseInt(e.target.value);
+    if (!isNaN(numFields)) addNewRow(numFields);
   };
 
-  const handleSave = (id) => {
-    setFields(fields.map(field => field.id === id ? { ...field, label: editText } : field));
-    setEditingId(null);
+  const addNewRow = (numFields) => {
+    setFieldCounter(prevCounter => {
+      const newFields = Array.from({ length: numFields }, () => {
+        const newCounter = prevCounter + 1;
+        return {
+          id: `field${newCounter}`,
+          label: `Nuevo campo ${newCounter}`,
+          type: "text",
+          required: false,
+        };
+      });
+  
+      setFields(prevFields => [...prevFields, ...newFields]);
+  
+      return prevCounter + numFields;
+    });
   };
-
-  const targetRef = useRef();
 
   return (
     <div>
-      <div className="flex items-stretch">
-        <button
-          type="button"
-          onClick={handleAddField}
-          className="mt-4 mr-2 p-2 bg-gray-500 text-white rounded-lg flex items-center justify-center"
-        >
-          <Plus size={16} className="mr-2" />
-          Añadir nuevo campo
-        </button>
+
+
+      <div className="flex flex-wrap items-center gap-4">
         <ExportToPDF targetRef={targetRef} />
+        <div className="flex flex-row gap-4 items-start cursor-pointer mt-4">
+          <select
+            id="fieldSelector"
+            className="p-2 bg-gray-500 text-white rounded-lg flex items-center justify-center cursor-pointer focus:outline-none hover:bg-gray-600"
+            onChange={handleFieldSelection}
+          >
+            <option value="">Agregar Campo</option>
+            <option value="1">1 Fila de 1 Campo</option>
+            <option value="2">1 Fila de 2 Campos</option>
+            <option value="3">1 Fila de 3 Campos</option>
+          </select>
+        </div>
       </div>
+
+
       <div ref={targetRef} className="mt-8 rounded-xl border border-gray-300 dark:border-gray-700 w-full">
         <div className="mx-auto w-full grow flex">
           <div className="flex-1 h-fit xl:flex">
@@ -121,37 +140,40 @@ export function MicrositeOpenPlayground() {
                   <div className="md:mt-6 mb-24 md:mb-12 md:mx-auto flex flex-row w-full lg:w-4/5">
                     <form noValidate="" className="p-0 lg:p-0 md:p-2 flex flex-col">
                       <div className="form-layout w-full">
+                        
                         <List
                           values={fields}
                           onChange={({ oldIndex, newIndex }) =>
                             setFields(arrayMove(fields, oldIndex, newIndex))
                           }
-                          renderList={({ children, props }) => <ul {...props} className="list-none pl-0">{children}</ul>}
+                          renderList={({ children, props }) => (
+                            <div {...props} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                              {children}
+                            </div>
+                          )}
                           renderItem={({ value, props }) => (
-                            <li {...props} className="block mb-1 text-sm font-medium text-gray-700 list-none pl-0">
-                              <span>{value.label}</span>
-                              <button
-                                type="button"
-                                onClick={() => handleEdit(value.id)}
-                                className="ml-2 text-blue-500"
-                              >
-                                <Pencil size={16} />
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() => handleDelete(value.id)}
-                                className="ml-2 text-red-500"
-                              >
-                                <Trash size={16} />
-                              </button>
-                              <input
-                                type="text"
-                                className="w-full border border-gray-400 py-2 text-gray-900 outline-none placeholder:text-gray-400 focus:border-primary-300 rounded-lg"
-                                id="field1"
-                              />
-                            </li>
+                            <div {...props} className="flex flex-col">
+                              <label className="text-sm font-medium text-gray-700 mb-1">{value.label}</label>
+                              {value.subLabel && <small className="text-xs text-gray-500 mb-2">{value.subLabel}</small>}
+                              <div className="flex items-center gap-2">
+                                <input 
+                                  type="text" 
+                                  className="w-full border border-gray-400 py-2 text-gray-900 outline-none placeholder:text-gray-400 focus:border-primary-300 rounded-lg" 
+                                  id={value.id}
+                                />
+                                <button type="button" onClick={() => handleEdit(value.id)} className="text-blue-500">
+                                  <Pencil size={16} />
+                                </button>
+                                {!protectedFields.includes(value.id) && (
+                                  <button type="button" onClick={() => handleDelete(value.id)} className="text-red-500">
+                                    <Trash size={16} />
+                                  </button>
+                                )}
+                              </div>
+                            </div>
                           )}
                         />
+                        
                         <div className="mt-6">
                           <p className="text-gray-500 text-sm text-justify">
                             Al continuar, acepto las <span>políticas</span> aplicables para el tratamiento de mis datos personales según la jurisdicción local del responsable y de
