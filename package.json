@@ -42,6 +42,7 @@
     "react-highlight-words": "^0.20.0",
     "react-markdown": "^8.0.7",
     "react-movable": "^3.4.0",
+    "react-to-pdf": "^1.0.1",
     "reactflow": "^11.9.3",
     "reactjs-popup": "^2.0.6",
     "recma-nextjs-static-props": "^1.0.0",

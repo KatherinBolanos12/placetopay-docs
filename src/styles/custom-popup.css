@@ -41,7 +41,7 @@
     unicode-bidi: isolate !important;
 }
 
-.popup-content ul {
+.popup-content .mdxUl ul {
     display: block !important;
     list-style-type: disc !important;
     margin-block-start: 1em !important;
@@ -53,25 +53,29 @@
 }
 
 .popup-content .close {
-    font-size: 3rem;
-    float: right;
-    padding-right: 2rem;
+    font-size: 3rem !important;
+    float: right !important;
+    padding-right: 2rem !important;
 }
 
 .popup-content .popup-scrollable {
-    max-height: 90vh;
-    overflow-y: auto;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
 }
 
 .not-prose .button {
     color: rgb(255 255 255 / var(--tw-text-opacity, 1));
-    font-weight: 500;
-    font-size: 0.875rem;
-    line-height: 1.5rem;
-    padding-top: 0.25rem;
-    padding-bottom: 0.25rem;
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
-    background-color: rgb(15 23 42 / var(--tw-bg-opacity, 1));
-    border-radius: 9999px;
+    font-weight: 500 !important;
+    font-size: 0.875rem !important;
+    line-height: 1.5rem !important;
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+    background-color: rgb(15 23 42 / var(--tw-bg-opacity, 1)) !important;
+    border-radius: 9999px!important;
+}
+
+.side-panel {
+    background-color: rgb(241 245 249 / var(--tw-bg-opacity, 1)) !important
 }
