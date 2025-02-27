@@ -1,13 +1,15 @@
 import * as React from "react";
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { ExportToPDF } from '@/components/ExportToPDF';
+import { ColorPicker } from '@/components/HexColorPicker';
 import { List, arrayMove } from "react-movable";
-import { Pencil, Trash, Plus } from "lucide-react";
+import { Pencil, Trash, Plus, Palette } from "lucide-react";
 import Image from 'next/image'
 import logoPng from '@/images/logos/logo.png'
 import footerSvg from '@/images/logos/footer.svg'
 
 export function MicrositeOpenPlayground() {
+  const [color, setColor] = useState("#64748B");
   const [fields, setFields] = React.useState([
     {
       id: "reference",
@@ -97,11 +99,16 @@ export function MicrositeOpenPlayground() {
           required: false,
         };
       });
-  
+
       setFields(prevFields => [...prevFields, ...newFields]);
-  
+
       return prevCounter + numFields;
     });
+  };
+
+  const [isVisible, setIsVisible] = useState(false);
+  const handleClick = () => {
+    setIsVisible(!isVisible);
   };
 
   return (
@@ -140,7 +147,7 @@ export function MicrositeOpenPlayground() {
                   <div className="md:mt-6 mb-24 md:mb-12 md:mx-auto flex flex-row w-full lg:w-4/5">
                     <form noValidate="" className="p-0 lg:p-0 md:p-2 flex flex-col">
                       <div className="form-layout w-full">
-                        
+
                         <List
                           values={fields}
                           onChange={({ oldIndex, newIndex }) =>
@@ -154,11 +161,11 @@ export function MicrositeOpenPlayground() {
                           renderItem={({ value, props }) => (
                             <div {...props} className="flex flex-col">
                               <label className="text-sm font-medium text-gray-700 mb-1">{value.label}</label>
-                              {value.subLabel && <small className="text-xs text-gray-500 mb-2">{value.subLabel}</small>}
                               <div className="flex items-center gap-2">
-                                <input 
-                                  type="text" 
-                                  className="w-full border border-gray-400 py-2 text-gray-900 outline-none placeholder:text-gray-400 focus:border-primary-300 rounded-lg" 
+                                <input
+                                  type="text"
+                                  className="w-full border border-gray-400 py-2 text-gray-900 outline-none placeholder:text-gray-400 focus:border-primary-300 rounded-lg"
+                                  placeholder={value.subLabel}
                                   id={value.id}
                                 />
                                 <button type="button" onClick={() => handleEdit(value.id)} className="text-blue-500">
@@ -173,13 +180,21 @@ export function MicrositeOpenPlayground() {
                             </div>
                           )}
                         />
-                        
                         <div className="mt-6">
                           <p className="text-gray-500 text-sm text-justify">
                             Al continuar, acepto las <span>políticas</span> aplicables para el tratamiento de mis datos personales según la jurisdicción local del responsable y de
                             <a href="https://www.placetopay.com/web/politicas-de-privacidad/" target="_blank" rel="noopener noreferrer" className="font-bold" tabIndex="-1"> Evertec PlacetoPay</a> en su calidad de encargado.
                           </p>
                         </div>
+                        <p className="flex flex-col items-center mt-6">
+                          {isVisible && (
+                            <ColorPicker color={color} setColor={setColor} />
+                          )}
+                          <div class="flex items-center space-x-2">
+                            <button type="button" className="mt-4 mb-4 pl-20 pr-20 p-2 bg-gray-500 text-white rounded-lg flex items-center justify-center" style={{ backgroundColor: color }}>Pagar</button>
+                            <button type="button" onClick={() => handleClick()}><Palette size={16} /></button>
+                          </div>
+                        </p>
                       </div>
                     </form>
                   </div>
