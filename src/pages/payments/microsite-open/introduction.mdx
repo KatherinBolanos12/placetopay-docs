@@ -1,11 +1,12 @@
-import { BenefitsOpen } from '@/components/BenefitsOpen'
-import { Requirements } from '@/components/Requirements'
-import { HeroPattern } from '@/components/HeroPattern'
-import { CenteredContainer } from '@/components/CenteredContainer'
+import { BenefitsOpen } from '@/components/BenefitsOpen';
+import { Requirements } from '@/components/Requirements';
+import { HeroPattern } from '@/components/HeroPattern';
+import { CenteredContainer } from '@/components/CenteredContainer';
 import { PopupComponent } from '@/components/PopupComponent';
+import { PopupContentMicrositeOpen } from '@/components/PopupContentMicrositeOpen';
 
 export const sectionMode = 'nav';
-export const description = ""
+export const description = "";
 
 <HeroPattern />
 
@@ -20,7 +21,7 @@ Se detallan los campos clave que deben completarse para completar el pago de man
     A continuación, le invitamos a personalizar su micrositio según sus preferencias. Tenga en cuenta que los campos "Referencia", "Descripción del pago", "Moneda" y "Monto" son obligatorios y, por lo tanto, no pueden eliminarse. 
     Al personalizarlo, podrá modificar los campos según el nombre que desee o agregar aquellos que considere necesarios. Asimismo, el logo y el color del botón pueden ajustarse a sus preferencias.
     <div className="not-prose">
-    <PopupComponent />
+    <PopupComponent buttonLabel={"Personalizar mi micrositio ➜"} content={<PopupContentMicrositeOpen/>} />
     </div>
   </div>
   <div className="max-w-md sm:ml-10 sm:mr-6">
