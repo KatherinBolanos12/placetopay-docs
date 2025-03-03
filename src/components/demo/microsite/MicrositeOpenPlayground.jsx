@@ -43,7 +43,7 @@ export function MicrositeOpenPlayground() {
     },
     {
       id: "buyer_id_type",
-      label: "Tipo de documento del comprador",
+      label: "Tipo de documento",
       type: "select",
       options: ["Selecciona una opción", "Cédula de ciudadanía", "Cédula de extranjería", "NIT"],
     },
@@ -159,68 +159,47 @@ export function MicrositeOpenPlayground() {
                   <div className="md:mt-6 mb-24 md:mb-12 md:mx-auto flex flex-row w-full lg:w-4/5">
                     <form noValidate="" className="p-0 lg:p-0 md:p-2 flex flex-col">
                       <div className="form-layout w-full">
+
                         <List
                           values={fields}
                           onChange={({ oldIndex, newIndex }) =>
                             setFields(arrayMove(fields, oldIndex, newIndex))
                           }
                           renderList={({ children, props }) => (
-                            <div {...props} className="grid grid-cols-1 gap-4">
+                            <div {...props} className="grid grid-cols-1 md:grid-cols-2 gap-4">
                               {children}
                             </div>
                           )}
                           renderItem={({ value, props }) => {
-                            if (value.id === "currency" || value.id === "amount" || value.id === "buyer_id_type" || value.id === "buyer_id" || value.id === "buyer_name" || value.id === "buyer_surname") {
-                              return (
-                                <div {...props} className="flex flex-col col-span-1">
-                                  <label className="text-sm font-medium text-gray-700 mb-1">{value.label}</label>
-                                  <div className="flex items-center gap-2">
-                                    <input
-                                      type="text"
-                                      className="w-full border border-gray-400 py-2 text-gray-900 outline-none placeholder:text-gray-400 focus:border-primary-300 rounded-lg"
-                                      placeholder={value.subLabel}
-                                      id={value.id}
-                                    />
-                                    {isVisiblePDF && (
+                            const isFullWidth = value.id === "reference" || value.id === "payment_description" || value.id === "buyer_email";
+                            return (
+                              <div {...props} className={`flex flex-col ${isFullWidth ? 'col-span-2' : 'col-span-1'}`}>
+                                <div className="flex items-center gap-2">
+                                  <label className="text-sm font-medium text-gray-700 mb-2">{value.label}</label>
+                                  <span className="text-sm text-gray-500 mb-2">{value.subLabel}</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <input
+                                    type="text"
+                                    className="w-full border border-gray-400 py-2 text-gray-900 outline-none placeholder:text-gray-400 focus:border-primary-300 rounded-lg"
+                                    id={value.id}
+                                  />
+                                  {isVisiblePDF && (
                                     <button type="button" onClick={() => handleEdit(value.id)} className="text-blue-500">
                                       <Pencil size={16} />
                                     </button>
-                                    )}
-                                    {isVisiblePDF && !protectedFields.includes(value.id) && (
-                                      <button type="button" onClick={() => handleDelete(value.id)} className="text-red-500">
-                                        <Trash size={16} />
-                                      </button>
-                                    )}
-                                  </div>
+                                  )}
+                                  {isVisiblePDF && !protectedFields.includes(value.id) && (
+                                    <button type="button" onClick={() => handleDelete(value.id)} className="text-red-500">
+                                      <Trash size={16} />
+                                    </button>
+                                  )}
                                 </div>
-                              );
-                            } else if (value.id === "reference" || value.id === "payment_description" || value.id === "buyer_email") {
-                              return (
-                                <div {...props} className="flex flex-col col-span-1 md:col-span-2">
-                                  <label className="text-sm font-medium text-gray-700 mb-1">{value.label}</label>
-                                  <div className="flex items-center gap-2">
-                                    <input
-                                      type="text"
-                                      className="w-full border border-gray-400 py-2 text-gray-900 outline-none placeholder:text-gray-400 focus:border-primary-300 rounded-lg"
-                                      placeholder={value.subLabel}
-                                      id={value.id}
-                                    />
-                                    {isVisiblePDF && (
-                                      <button type="button" onClick={() => handleEdit(value.id)} className="text-blue-500">
-                                        <Pencil size={16} />
-                                      </button>
-                                    )}
-                                    {isVisiblePDF && !protectedFields.includes(value.id) && (
-                                      <button type="button" onClick={() => handleDelete(value.id)} className="text-red-500">
-                                        <Trash size={16} />
-                                      </button>
-                                    )}
-                                  </div>
-                                </div>
-                              );
-                            }
+                              </div>
+                            );
                           }}
                         />
+
                         <div className="mt-6">
                           <p className="text-gray-500 text-sm text-justify">
                             Al continuar, acepto las <span>políticas</span> aplicables para el tratamiento de mis datos personales según la jurisdicción local del responsable y de
