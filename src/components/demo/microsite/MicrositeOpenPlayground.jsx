@@ -1,12 +1,12 @@
 import * as React from "react";
 import { useRef, useState } from 'react';
-import { ExportToPDF } from '@/components/ExportToPDF';
 import { ColorPicker } from '@/components/HexColorPicker';
 import { List, arrayMove } from "react-movable";
 import { Pencil, Trash, Plus, Palette } from "lucide-react";
 import Image from 'next/image'
 import logoPng from '@/images/logos/logo.png'
 import footerSvg from '@/images/logos/footer.svg'
+import generatePDF from 'react-to-pdf';
 
 export function MicrositeOpenPlayground() {
   const [color, setColor] = useState("#64748B");
@@ -17,7 +17,7 @@ export function MicrositeOpenPlayground() {
       subLabel: "(Referencia)",
       type: "text",
       required: true,
-      
+
     },
     {
       id: "payment_description",
@@ -108,8 +108,18 @@ export function MicrositeOpenPlayground() {
   };
 
   const [isVisible, setIsVisible] = useState(false);
+  const [isVisiblePDF, setIsVisiblePDF] = useState(true);
+
   const handleClick = () => {
     setIsVisible(!isVisible);
+  };
+
+  const handleClickPDF = () => {
+    setIsVisiblePDF(false);
+    setTimeout(() => {
+      generatePDF(targetRef, { filename: 'MicrositeOpen.pdf' });
+      setIsVisiblePDF(true);
+    }, 1000);
   };
 
   return (
@@ -117,7 +127,7 @@ export function MicrositeOpenPlayground() {
 
 
       <div className="flex flex-wrap items-center gap-4">
-        <ExportToPDF targetRef={targetRef} />
+        <button className="mt-4 p-2 bg-gray-500 text-white rounded-lg flex items-center justify-center" onClick={() => handleClickPDF()}>Descargar PDF</button>
 
         <div className="flex flex-row gap-4 items-start cursor-pointer mt-4">
           <select
@@ -165,16 +175,18 @@ export function MicrositeOpenPlayground() {
                                 <div {...props} className="flex flex-col col-span-1">
                                   <label className="text-sm font-medium text-gray-700 mb-1">{value.label}</label>
                                   <div className="flex items-center gap-2">
-                                    <input 
-                                      type="text" 
-                                      className="w-full border border-gray-400 py-2 text-gray-900 outline-none placeholder:text-gray-400 focus:border-primary-300 rounded-lg" 
+                                    <input
+                                      type="text"
+                                      className="w-full border border-gray-400 py-2 text-gray-900 outline-none placeholder:text-gray-400 focus:border-primary-300 rounded-lg"
                                       placeholder={value.subLabel}
                                       id={value.id}
                                     />
+                                    {isVisiblePDF && (
                                     <button type="button" onClick={() => handleEdit(value.id)} className="text-blue-500">
                                       <Pencil size={16} />
                                     </button>
-                                    {!protectedFields.includes(value.id) && (
+                                    )}
+                                    {isVisiblePDF && !protectedFields.includes(value.id) && (
                                       <button type="button" onClick={() => handleDelete(value.id)} className="text-red-500">
                                         <Trash size={16} />
                                       </button>
@@ -187,16 +199,18 @@ export function MicrositeOpenPlayground() {
                                 <div {...props} className="flex flex-col col-span-1 md:col-span-2">
                                   <label className="text-sm font-medium text-gray-700 mb-1">{value.label}</label>
                                   <div className="flex items-center gap-2">
-                                    <input 
-                                      type="text" 
-                                      className="w-full border border-gray-400 py-2 text-gray-900 outline-none placeholder:text-gray-400 focus:border-primary-300 rounded-lg" 
+                                    <input
+                                      type="text"
+                                      className="w-full border border-gray-400 py-2 text-gray-900 outline-none placeholder:text-gray-400 focus:border-primary-300 rounded-lg"
                                       placeholder={value.subLabel}
                                       id={value.id}
                                     />
-                                    <button type="button" onClick={() => handleEdit(value.id)} className="text-blue-500">
-                                      <Pencil size={16} />
-                                    </button>
-                                    {!protectedFields.includes(value.id) && (
+                                    {isVisiblePDF && (
+                                      <button type="button" onClick={() => handleEdit(value.id)} className="text-blue-500">
+                                        <Pencil size={16} />
+                                      </button>
+                                    )}
+                                    {isVisiblePDF && !protectedFields.includes(value.id) && (
                                       <button type="button" onClick={() => handleDelete(value.id)} className="text-red-500">
                                         <Trash size={16} />
                                       </button>
@@ -219,7 +233,9 @@ export function MicrositeOpenPlayground() {
                           )}
                           <div class="flex items-center space-x-2">
                             <button type="button" className="mt-4 mb-4 pl-20 pr-20 p-2 bg-gray-500 text-white rounded-lg flex items-center justify-center" style={{ backgroundColor: color }}>Pagar</button>
-                            <button type="button" onClick={() => handleClick()}><Palette size={16} /></button>
+                            {isVisiblePDF && (
+                              <button type="button" onClick={() => handleClick()}><Palette size={16} /></button>
+                            )}
                           </div>
                         </p>
                       </div>

@@ -55,12 +55,12 @@
 .popup-content .close {
     font-size: 3rem !important;
     float: right !important;
-    padding-right: 2rem !important;
 }
 
 .popup-content .popup-scrollable {
     max-height: 90vh !important;
     overflow-y: auto !important;
+    padding: 1rem 2rem !important;
 }
 
 .not-prose .button {
