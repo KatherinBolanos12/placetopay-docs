@@ -2,14 +2,14 @@ import * as React from "react";
 import { useRef, useState } from 'react';
 import { ColorPicker } from '@/components/HexColorPicker';
 import { List, arrayMove } from "react-movable";
-import { Pencil, Trash, Plus, Palette } from "lucide-react";
+import { Pencil, Trash, Plus, Palette, ImagePlus } from "lucide-react";
+import { ImageToBase64 } from '@/components/PopupLogoMicrositeOpen';
+import { ContrastText } from '@/components/AutomaticTextContrast';
 import Image from 'next/image'
-import logoPng from '@/images/logos/logo.png'
 import footerSvg from '@/images/logos/footer.svg'
 import generatePDF from 'react-to-pdf';
 
 export function MicrositeOpenPlayground() {
-  const [color, setColor] = useState("#64748B");
   const [fields, setFields] = React.useState([
     {
       id: "reference",
@@ -70,7 +70,6 @@ export function MicrositeOpenPlayground() {
   ]);
 
   const [fieldCounter, setFieldCounter] = React.useState(6);
-  const targetRef = useRef();
   const protectedFields = ["reference", "payment_description", "currency", "amount"];
 
   const handleEdit = (id) => {
@@ -107,15 +106,39 @@ export function MicrositeOpenPlayground() {
     });
   };
 
-  const [isVisible, setIsVisible] = useState(false);
+  const targetRef = useRef();
+  const [isVisibleBtn, setIsVisibleBtn] = useState(false);
+  const [isVisibleLogo, setIsVisibleLogo] = useState(false);
+  const [isVisibleSidePanel, setIsVisibleSidePanel] = useState(false);
   const [isVisiblePDF, setIsVisiblePDF] = useState(true);
+  const [colorBtn, setColorBtn] = useState("#64748B");
+  const [colorSidePanel, setColorSidePanel] = useState("#F1F5F9");
 
-  const handleClick = () => {
-    setIsVisible(!isVisible);
+  // Enseñar el botón de cambio de color para el panel lateral
+
+  const handleClickSidePanel = () => {
+    setIsVisibleSidePanel(!isVisibleSidePanel);
   };
+
+  // Enseñar el botón de cambio de color para el botón
+
+  const handleClickBtn = () => {
+    setIsVisibleBtn(!isVisibleBtn);
+  };
+
+  // Enseñar el botón de cambio de logo
+
+  const handleClickLogo = () => {
+    setIsVisibleLogo(!isVisibleLogo);
+  };
+
+  // Esconder botones al descargar PDF
 
   const handleClickPDF = () => {
     setIsVisiblePDF(false);
+    setIsVisibleBtn(false);
+    setIsVisibleLogo(false);
+    setIsVisibleSidePanel(false);
     setTimeout(() => {
       generatePDF(targetRef, { filename: 'MicrositeOpen.pdf' });
       setIsVisiblePDF(true);
@@ -151,7 +174,10 @@ export function MicrositeOpenPlayground() {
               <div className="card-main h-fit flex flex-col justify-between" name="EGM Demostración - Comercio de Pruebas Test Lina" header="https://placetopay-static-uat-bucket.s3.us-east-2.amazonaws.com/co/test/microsites/images/8V4kVIZ5f9tdiIcNOXmKwxXwkZBTohX6ga7SiGu6.png">
                 <div className="p-4 flex-grow">
                   <div className="w-full flex justify-center mt-4 mb-8">
-                    <Image src={logoPng} alt="Logo" />
+                    <ImageToBase64 isVisible={isVisibleLogo}></ImageToBase64>
+                    {isVisiblePDF && (
+                      <button type="button" className="pl-3" onClick={() => handleClickLogo()}><ImagePlus size={16} /></button>
+                    )}
                   </div>
                   <div className="my-4 md:my-6 text-center">
                     <p className="font-bold">Comience el proceso de pago, ingresando la siguiente información</p>
@@ -207,13 +233,15 @@ export function MicrositeOpenPlayground() {
                           </p>
                         </div>
                         <p className="flex flex-col items-center mt-6">
-                          {isVisible && (
-                            <ColorPicker color={color} setColor={setColor} />
+                          {isVisibleBtn && (
+                            <ColorPicker color={colorBtn} setColor={setColorBtn} />
                           )}
                           <div class="flex items-center space-x-2">
-                            <button type="button" className="mt-4 mb-4 pl-20 pr-20 p-2 bg-gray-500 text-white rounded-lg flex items-center justify-center" style={{ backgroundColor: color }}>Pagar</button>
+                            <ContrastText bgColor={colorBtn}>
+                              <button type="button" className="mt-4 mb-4 pl-20 pr-20 p-2 rounded-lg flex items-center justify-center" style={{ backgroundColor: colorBtn }}>Pagar</button>
+                            </ContrastText>
                             {isVisiblePDF && (
-                              <button type="button" onClick={() => handleClick()}><Palette size={16} /></button>
+                              <button type="button" onClick={() => handleClickBtn()}><Palette size={16} /></button>
                             )}
                           </div>
                         </p>
@@ -226,17 +254,29 @@ export function MicrositeOpenPlayground() {
           </div>
 
 
-          <div className="shrink-0 flex flex-col justify-between relative p-8 w-1/3 z-0 side-panel">
+          <div style={{ backgroundColor: colorSidePanel }} className="shrink-0 flex flex-col justify-between relative p-8 w-1/3 z-0">
             <div className="text-black">
-              <h2 className="font-bold text-2xl mb-3 md:mb-5">Pagos electrónicos</h2>
-              <p className="text-justify">
-                Pague de forma segura desde su hogar, oficina o cualquier lugar a través de nuestro sistema de pago. Utilice convenientemente nuestro servicio las 24 horas del día, los 7 días de la semana.
-              </p>
+              <ContrastText bgColor={colorSidePanel}>
+                <h2 className="font-bold text-2xl mb-3 md:mb-5">Pagos electrónicos</h2>
+                <p className="text-justify">
+                  Pague de forma segura desde su hogar, oficina o cualquier lugar a través de nuestro sistema de pago. Utilice convenientemente nuestro servicio las 24 horas del día, los 7 días de la semana.
+                </p>
+              </ContrastText>
             </div>
+            {isVisibleSidePanel && (
+              <ColorPicker color={colorSidePanel} setColor={setColorSidePanel} />
+            )}
             <div className="flex flex-col">
               <div className="flex flex-wrap justify-between items-center">
                 <div className="flex flex-row items-center">
-                  <div className="text-xs font-semibold text-gray-500 p-2">Hecho por</div>
+                  {isVisiblePDF && (
+                    <ContrastText bgColor={colorSidePanel}>
+                      <button type="button" onClick={() => handleClickSidePanel()}><Palette size={16} /></button>
+                    </ContrastText>
+                  )}
+                  <ContrastText bgColor={colorSidePanel}>
+                    <div className="text-xs font-semibold p-2">Hecho por</div>
+                  </ContrastText>
                   <div className="p-4">
                     <Image src={footerSvg} alt="Logo" className="w-24" />
                   </div>
@@ -244,17 +284,21 @@ export function MicrositeOpenPlayground() {
                 <div className="relative">
                   <div className="flex flex-row items-center cursor-pointer">
                     <div className="text-gray-500 h-5 w-5">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 0 1 .865-.501 48.172 48.172 0 0 0 3.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z"></path>
-                      </svg>
+                      <ContrastText bgColor={colorSidePanel}>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 0 1 .865-.501 48.172 48.172 0 0 0 3.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z"></path>
+                        </svg>
+                      </ContrastText>
                     </div>
-                    <div className="text-xs font-semibold text-gray-500 p-2">Español
-
-                    </div>
+                    <ContrastText bgColor={colorSidePanel}>
+                      <div className="text-xs font-semibold p-2">Español</div>
+                    </ContrastText>
                     <div className="text-gray-500 h-5 w-5">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"></path>
-                      </svg>
+                      <ContrastText bgColor={colorSidePanel}>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"></path>
+                        </svg>
+                      </ContrastText>
                     </div>
                   </div>
                 </div>
