@@ -17,9 +17,9 @@ export function ImageToBase64({isVisible}) {
     return (
         <div>
             {isVisible && (
-                <input className='mb-3 p-1 border-2 rounded-md' type="file" accept="image" onChange={handleFileChange} />
+                <input className='mb-3 p-1 border-2 rounded-md' type="file" accept="image/jpeg,image/png,image/jpg,image/svg,image/gif" onChange={handleFileChange} />
             )}
-            <img className='max-w-xs' src={base64} alt="Logo"></img>
+            <img className='max-w-xs max-h-40' src={base64} alt="Logo"></img>
         </div>
     );
 };
