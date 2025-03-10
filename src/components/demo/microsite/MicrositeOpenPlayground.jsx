@@ -7,7 +7,7 @@ import { ImageToBase64 } from '@/components/PopupLogoMicrositeOpen';
 import { ContrastText } from '@/components/AutomaticTextContrast';
 import Image from 'next/image'
 import footerSvg from '@/images/logos/footer.svg'
-import generatePDF from 'react-to-pdf';
+import generatePDF, { Margin } from 'react-to-pdf';
 
 export function MicrositeOpenPlayground() {
   const [fields, setFields] = React.useState([
@@ -134,30 +134,50 @@ export function MicrositeOpenPlayground() {
 
   // Esconder botones al descargar PDF
 
+  const getContentSize = () => {
+    const content = targetRef.current;
+    if (content) {
+      const rect = content.getBoundingClientRect();
+      return {
+        width: rect.width,
+        height: rect.height
+      };
+    }
+    return { width: 210, height: 297 }; // tamaño A4 por defecto en mm
+  };
+
   const handleClickPDF = () => {
+    const contentSize = getContentSize();
+    const pdfOptions = {
+      method: 'open',
+      page: {
+        format: [contentSize.height / 4, contentSize.width / 4],
+        orientation: 'landscape'
+      },
+      filename: 'MicrositeOpen.pdf'
+    }
     setIsVisiblePDF(false);
     setIsVisibleBtn(false);
     setIsVisibleLogo(false);
     setIsVisibleSidePanel(false);
     setTimeout(() => {
-      generatePDF(targetRef, { filename: 'MicrositeOpen.pdf' });
+      generatePDF(targetRef, pdfOptions);
       setIsVisiblePDF(true);
     }, 1000);
   };
 
+  const [items, setItems] = React.useState(
+    Array.from(Array(5).keys()).map((val) => `Item ${val}`),
+  );
+
   return (
     <div>
-
-
       <div className="flex flex-wrap items-center gap-4">
         <button className="mt-4 p-2 bg-gray-500 text-white rounded-lg flex items-center justify-center" onClick={() => handleClickPDF()}>Descargar PDF</button>
-
         <div className="flex flex-row gap-4 items-start cursor-pointer mt-4">
           <select
             id="fieldSelector"
-            className="p-2 bg-gray-500 text-white rounded-lg flex items-center justify-center cursor-pointer focus:outline-none hover:bg-gray-600"
-
-          >
+            className="p-2 bg-gray-500 text-white rounded-lg flex items-center justify-center cursor-pointer focus:outline-none hover:bg-gray-600">
             <option value="">Agregar Campo</option>
             <option value="1">1 Fila de 1 Campo</option>
             <option value="2">1 Fila de 2 Campos</option>
@@ -165,8 +185,6 @@ export function MicrositeOpenPlayground() {
           </select>
         </div>
       </div>
-
-
       <div ref={targetRef} className="mt-8 rounded-xl border border-gray-300 dark:border-gray-700 w-full">
         <div className="mx-auto w-full grow flex">
           <div className="flex-1 h-fit xl:flex">
@@ -185,24 +203,35 @@ export function MicrositeOpenPlayground() {
                   <div className="md:mt-6 mb-24 md:mb-12 md:mx-auto flex flex-row w-full lg:w-4/5">
                     <form noValidate="" className="p-0 lg:p-0 md:p-2 flex flex-col">
                       <div className="form-layout w-full">
-
+                        
                         <List
                           values={fields}
                           onChange={({ oldIndex, newIndex }) =>
                             setFields(arrayMove(fields, oldIndex, newIndex))
                           }
-                          renderList={({ children, props }) => (
-                            <div {...props} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          renderList={({ children, props, isDragged }) => (
+                            <div {...props} className="grid grid-cols-1 md:grid-cols-2 gap-4" style={{ cursor: isDragged ? 'grabbing' : undefined }}>
                               {children}
                             </div>
                           )}
-                          renderItem={({ value, props }) => {
+                          renderItem={({ value, props, isDragged, isSelected }) => {
                             const isFullWidth = value.id === "reference" || value.id === "payment_description" || value.id === "buyer_email";
                             return (
-                              <div {...props} className={`flex flex-col ${isFullWidth ? 'col-span-2' : 'col-span-1'}`}>
+                              <div
+                                {...props}
+                                key={props.key}
+                                style={{
+                                  ...props.style,
+                                  cursor: isDragged ? 'grabbing' : 'grab',
+                                  backgroundColor: isDragged || isSelected ? '#EEE' : '#FFF'
+                                }}
+                                className={`flex flex-col ${isFullWidth ? 'col-span-2' : 'col-span-1'}`}>
                                 <div className="flex items-center gap-2">
                                   <label className="text-sm font-medium text-gray-700 mb-2">{value.label}</label>
                                   <span className="text-sm text-gray-500 mb-2">{value.subLabel}</span>
+                                  {protectedFields.includes(value.id) && (
+                                    <p className="text-red-500">*</p>
+                                  )}
                                 </div>
                                 <div className="flex items-center gap-2">
                                   <input
@@ -225,7 +254,6 @@ export function MicrositeOpenPlayground() {
                             );
                           }}
                         />
-
                         <div className="mt-6">
                           <p className="text-gray-500 text-sm text-justify">
                             Al continuar, acepto las <span>políticas</span> aplicables para el tratamiento de mis datos personales según la jurisdicción local del responsable y de
@@ -252,8 +280,6 @@ export function MicrositeOpenPlayground() {
               </div>
             </div>
           </div>
-
-
           <div style={{ backgroundColor: colorSidePanel }} className="shrink-0 flex flex-col justify-between relative p-8 w-1/3 z-0">
             <div className="text-black">
               <ContrastText bgColor={colorSidePanel}>
@@ -308,7 +334,6 @@ export function MicrositeOpenPlayground() {
         </div>
       </div>
     </div>
-
   );
 }
 export default MicrositeOpenPlayground;
