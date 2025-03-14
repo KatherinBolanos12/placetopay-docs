@@ -222,8 +222,11 @@ export function MicrositeOpenPlayground() {
                                 key={props.key}
                                 style={{
                                   ...props.style,
+                                  padding: '0.3rem',
                                   cursor: isDragged ? 'grabbing' : 'grab',
-                                  backgroundColor: isDragged || isSelected ? '#EEE' : '#FFF'
+                                  borderRadius: '0.5rem',
+                                  backgroundColor: isDragged || isSelected ? '#EEE' : '#FFF',
+                                  zIndex: isDragged ? 1000 : 'auto'
                                 }}
                                 className={`flex flex-col ${isFullWidth ? 'col-span-2' : 'col-span-1'}`}>
                                 <div className="flex items-center gap-2">
