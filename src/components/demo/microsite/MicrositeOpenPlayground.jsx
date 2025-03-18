@@ -75,9 +75,10 @@ export function MicrositeOpenPlayground() {
     const content = targetRef.current;
     if (content) {
       const rect = content.getBoundingClientRect();
+      const mmPerPx = 25.4 / 96;
       return {
-        width: rect.width,
-        height: rect.height
+        width: Math.ceil(rect.width * mmPerPx),
+        height: Math.ceil(rect.height * mmPerPx)
       };
     }
     return { width: 210, height: 297 }; // tamaño A4 por defecto en mm
@@ -86,10 +87,10 @@ export function MicrositeOpenPlayground() {
   const handleClickPDF = () => {
     const contentSize = getContentSize();
     const pdfOptions = {
-      method: 'open',
       page: {
-        format: [contentSize.height / 4, contentSize.width / 4],
-        orientation: 'landscape'
+        format: [contentSize.width + 20, contentSize.height + 20],
+        orientation: contentSize.width > contentSize.height ? 'landscape' : 'portrait',
+        margin: 10 // 10mm margin on all sides
       },
       filename: 'MicrositeOpen.pdf'
     }
@@ -287,7 +288,7 @@ export function MicrositeOpenPlayground() {
                 <div className="flex flex-row items-center">
                   {isVisiblePDF && (
                     <ContrastText bgColor={colorSidePanel}>
-                      <button type="button" onClick={() => handleClickSidePanel()}><Palette size={16} /></button>
+                      <button type="button" onClick={() => handleClickSidePanel()}><Palette size={16}/></button>
                     </ContrastText>
                   )}
                   <ContrastText bgColor={colorSidePanel}>
