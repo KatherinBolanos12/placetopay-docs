@@ -159,7 +159,8 @@ export function MicrositeOpenPlayground() {
                   <div className="my-4 md:my-6 text-center">
                     <p className="font-bold">Comience el proceso de pago, ingresando la siguiente información</p>
                   </div>
-                  <div className="md:mt-6 mb-24 md:mb-12 md:mx-auto flex flex-row w-full lg:w-4/5">
+                  <div className="md:mt-6 mb-24 md:mb-12 md:mx-auto flex flex-row w-full ">
+                  
                     <form noValidate="" className="p-0 lg:p-0 md:p-2 flex flex-col">
                       <div className="form-layout w-full">
 
@@ -190,10 +191,6 @@ export function MicrositeOpenPlayground() {
                                     borderRadius: "0.5rem",
                                     backgroundColor: isDragged || isSelected ? "#EEE" : "#FFF",
                                     zIndex: isDragged ? 1000 : "auto",
-                                    display: "grid",
-                                    gridTemplateColumns: `repeat(${value.columns.length}, 1fr)`,
-                                    gap: "8px",
-                                    width: "100%",
                                   }}
                                   className="col-span-2"
                                 >
