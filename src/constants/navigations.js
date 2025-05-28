@@ -263,9 +263,10 @@ export const TAB_NAVIGATION = {
             ],
           },
           {
-            title: 'Flujo de Pago en Web Checkout',
+            title: 'Flujos de Pago',
             links: [
-              { title: 'Proceso de pago', href: '/payments/process-pay' },
+              { title: 'Proceso de pago en WebCheckout', href: '/payments/process-pay' },
+              { title: 'Preautorización', href: '/payments/preauthorization' },
             ],
           },
           {
@@ -378,9 +379,10 @@ export const TAB_NAVIGATION = {
             ],
           },
           {
-            title: 'Payment Flow in Web Checkout',
+            title: 'Payment Flows',
             links: [
-              { title: 'Payment Process', href: '/payments/process-pay' },
+              { title: 'Payment Process in Web Checkout', href: '/payments/process-pay' },
+              { title: 'Preauthorization', href: '/payments/preauthorization' },
             ],
           },
           {
@@ -1155,10 +1157,13 @@ export const TAB_NAVIGATION = {
           {
             title: 'Token requestor',
             links: [
-              { title: 'Introducción', href: '/token-requestor' },
               {
-                title: 'Tipos de identificación',
-                href: '/token-requestor/business-identification-types',
+                title: 'Introducción',
+                href: '/token-requestor'
+              },
+              {
+                title: 'Definiciones clave',
+                href: '/token-requestor/definitions',
               },
             ],
           },
@@ -1176,14 +1181,6 @@ export const TAB_NAVIGATION = {
               {
                 title: 'Prueba tu integración',
                 href: '/token-requestor/integration/testing',
-              },
-              {
-                title: 'Definiciones clave',
-                href: '/token-requestor/integration/definitions',
-              },
-              {
-                title: 'Uso del requestId',
-                href: '/token-requestor/integration/request-id',
               },
             ],
           },
@@ -1235,8 +1232,8 @@ export const TAB_NAVIGATION = {
                 href: '/token-requestor'
               },
               {
-                title: 'Merchant Identification Types',
-                href: '/token-requestor/business-identification-types',
+                title: 'Key definitions',
+                href: '/token-requestor/definitions',
               },
             ],
           },
@@ -1254,14 +1251,6 @@ export const TAB_NAVIGATION = {
               {
                 title: 'Test Your Integration',
                 href: '/token-requestor/integration/testing',
-              },
-              {
-                title: 'Key definitions',
-                href: '/token-requestor/integration/definitions',
-              },
-              {
-                title: 'Use of identifier request',
-                href: '/token-requestor/integration/request-id',
               },
             ],
           },
