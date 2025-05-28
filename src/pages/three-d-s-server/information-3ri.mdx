@@ -6,7 +6,6 @@ export const description = "Descripción 3RI"
 <HeroPattern />
 
 # ¿Que es 3RI?
-
 Las Requestor Initiated Transactions (3RI) son transacciones iniciadas por el comercio o entidad solicitante, sin la participación directa del titular de la tarjeta en el momento de la compra. Estas transacciones son fundamentales en escenarios como pagos recurrentes, cobros diferidos, suscripciones y órdenes de pago automatizadas. A diferencia de una transacción tradicional en línea, donde el cliente ingresa sus credenciales en tiempo real, en una transacción 3RI el comercio utiliza información previamente autenticada para procesar pagos de forma segura y eficiente.  
 A continuación se describe el comportamiendo de 3RI con los diferentes componentes:
 
@@ -44,7 +43,9 @@ La integración de 3RI con WebCheckout permite que los comercios realicen cobros
    2. Envía la transacción al emisor de la tarjeta
    3. El emisor decide si aprueba o rechaza la transacción sin requerir autenticación del usuario.
    4. El resultado del pago se refleja en el panel, dejando la traza de haber pasado por 3RI. 
+
 ---
+
 ## Comportamiento de 3RI con Panel
 Desde el panel se permite visualizar la trazabilidad cuando una transacción ha pasado por 3RI, encontrando dentro del detalle de la transferencia la marca en los datos adicionales. 
 Esta marca toma importancia ya que indica el cambio de responsabilidad que se realiza al hacer uso de 3RI durante el proceso de transacción, dejando la responsabilidad de la autenticación sobre el banco emisor.
@@ -52,6 +53,7 @@ Esta marca toma importancia ya que indica el cambio de responsabilidad que se re
     <img src="/3DS_server/3RI/Img3RI-PanelEs.webp" alt="information3RI" className="shadow rounded-md my-0"/>
   </div>
 ---
+
 # Flujos con 3RI
 Los siguientes diagramas representan la interacción de 3RI dentro del flujo de autenticación del tarjetahabiente durante una suscripción y el flujo de pago dentro de una transacción.
    <img src="/3DS_server/3RI/Suscripción_Final.webp" alt="information3RI" width="700" className="shadow rounded-md my-0"/>

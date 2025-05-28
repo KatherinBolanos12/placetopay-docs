@@ -3,9 +3,9 @@ import { CenteredContainer } from '@/components/CenteredContainer'
 
 export const description = "Descripción 3RI"
 
-<HeroPattern />
+<HeroPattern /> 
 
-# What is 3RI??
+# What is 3RI?
 Requestor Initiated Transactions (3RI) are transactions initiated by the merchant or requesting entity without the direct involvement of the cardholder at the time of purchase. These transactions are essential in scenarios such as recurring payments, deferred charges, subscriptions, and automated payment orders. Unlike traditional online transactions where the customer enters their credentials in real time, a 3RI transaction uses previously authenticated information to process payments securely and efficiently.
 The following section describes the behavior of 3RI across the different components:
 
@@ -36,9 +36,7 @@ The integration of 3RI with WebCheckout allows merchants to securely process cha
   <div className="max-w-md sm:ml-10 sm:mr-6">
     <img src="/3DS_server/3RI/3ri-sus3-en.webp" alt="information3RI" className="shadow rounded-md my-0"/>
   </div>
-
-
-
+  
 - **Token-Based Payments**  
    When the merchant needs to process a charge without the customer’s involvement, WebCheckout:
    1. Initiates a 3RI payment request using the stored token.
